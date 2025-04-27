@@ -160,7 +160,7 @@ body {
 
   /* Target the Total Cost text specifically */
   .total-cost-text {
-    font-size: var(--mobile-text-xl-size); /* Or any other appropriate size */
+    font-size: var(--mobile-text-2xl-size); /* Or any other appropriate size */
   }
 }
 
@@ -193,4 +193,5 @@ body {
         font-size: var(--text-2xl-size); /* Or any other appropriate size */
     }
 }
+
 
