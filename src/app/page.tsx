@@ -172,7 +172,7 @@ export default function Home() {
                       <tr className="text-left">
                         <th className="w-1/5 p-2 text-base md:text-lg">Service</th>
                         <th className="w-1/5 p-2 text-center text-base md:text-lg">AI Model</th>
-                        <th className="w-2/5 p-2 text-center text-base md:text-lg">Rate / Unit &amp; Adjust</th>
+                        <th className="w-2/5 p-2 text-center text-base md:text-lg">Rate (/Unit) &amp; Adjust</th>
                         <th className="w-1/5 p-2 text-right text-base md:text-lg">Cost (BDT)</th>
                       </tr>
                     </thead>
@@ -241,7 +241,7 @@ export default function Home() {
                         </td>
                         <td className="py-4 text-right font-bold total-cost-text text-xl text-primary">
                           {currencySymbol}
-                          {totalPrice} / mo
+                          {totalPrice}
                         </td>
                       </tr>
                     </tfoot>
