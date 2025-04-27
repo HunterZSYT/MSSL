@@ -93,7 +93,7 @@ export default function Home() {
       const typedService = service as Service;
       total += debouncedServiceCounts[typedService] * (rates[typedService] || 0);
     }
-    return total;
+    return parseFloat(total.toFixed(2));
   }, [debouncedServiceCounts, rates]);
 
   useEffect(() => {
@@ -208,7 +208,6 @@ export default function Home() {
                             <td className="p-2 text-center font-bold text-primary text-sm md:text-lg">
                               {currencySymbol}
                               {rate} / {unit}
-                              {unitDescription && ` ${unitDescription}`}
                             </td>
                             <td className="p-2">
                               <div className="flex items-center justify-center space-x-4">
