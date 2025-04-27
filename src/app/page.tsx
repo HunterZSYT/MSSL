@@ -1,28 +1,41 @@
 "use client";
 
-import {useState, useEffect, useCallback} from "react";
+import {useState, useEffect, useCallback, useRef} from "react";
 import {Button} from "@/components/ui/button";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Slider} from "@/components/ui/slider";
 import {Toaster} from "@/components/ui/toaster";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
-import {useDebounce} from "@/hooks/use-debounce";
+import {Tooltip, TooltipContent, TooltipProvider} from "@/components/ui/tooltip";
 import {Info} from "lucide-react";
+import {Separator} from "@/components/ui/separator";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 
 import {cn} from "@/lib/utils";
-import {AIModelSelector} from "@/components/ai-model-selector";
 import {AI_MODELS, AIModel} from "@/lib/ai-models";
-import {useAIPricing} from "@/hooks/use-ai-pricing";
+import {useDebounce} from "@/hooks/use-debounce";
 
-const defaultRates = {
-  text: 1,
-  image: 5,
-  audio: 50,
-  video: 100,
-  model3d: 100,
+const currencySymbol = "৳"; // Local currency symbol
+
+const aiModelDescriptions: Record<string, string> = {
+  'EleutherAI/gpt-j-6B': 'Fast, efficient text generation.',
+  'bigscience/bloom-7b1': 'Large language model for various tasks.',
+  'meta-llama/Llama-2-7b-chat': 'Optimized for conversational AI.',
+  'google/flan-t5-xl': 'Versatile text-to-text model.',
+  'text-davinci-003': 'Powerful, but via inference providers.',
+  'stabilityai/stable-diffusion-v1-5': 'Quick image creation.',
+  'runwayml/stable-diffusion-xl': 'High-res images from RunwayML.',
+  'deepfloyd/IF-I-XL-v1.0': 'Detailed, coherent image generation.',
+  'stabilityai/stable-diffusion-2-1': 'Improved image quality.',
+  'suno/bark': 'Expressive, versatile audio clips.',
+  'tts_models/en/ljspeech/vits': 'High-fidelity voice synthesis.',
+  'facebook/tts_transformer-es-en': 'Multilingual text-to-speech.',
+  'runwayml/stablevideo-diffusion': 'Dynamic video clips.',
+  'damo/cogvideo': 'Creative video content generation.',
+  'CompVis/dreamfusion': 'Cutting-edge 3D models.',
+  'dreamfusion-3d': 'Detailed 3D asset creation.',
 };
 
-type Service = keyof typeof defaultRates;
+type Service = 'text' | 'image' | 'audio' | 'video' | 'model3d';
 
 const serviceLabels: Record<Service, string> = {
   text: "Text Prompts",
@@ -35,21 +48,12 @@ const serviceLabels: Record<Service, string> = {
 const serviceUnits: Record<Service, string> = {
   text: "prompts",
   image: "images",
-  audio: "seconds",
-  video: "seconds",
+  audio: "clips",
+  video: "clips",
   model3d: "models",
 };
 
-const currencySymbol = "৳"; // Local currency symbol
-
-const aiModelDescriptions: Record<string, string> = {
-  'gemini-pro': 'Balanced performance and cost.',
-  'gpt-4': 'Highest quality, higher price.',
-  'llama-2': 'Good performance, lower price.',
-};
-
 export default function Home() {
-  const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   const [serviceCounts, setServiceCounts] = useState({
     text: 0,
     image: 0,
@@ -58,35 +62,36 @@ export default function Home() {
     model3d: 0,
   });
 
-  const {getModelRates} = useAIPricing();
-  const [rates, setRates] = useState(getModelRates());
-
   const [selectedModels, setSelectedModels] = useState<{ [key in Service]: string }>({
-    text: "gemini-pro",
-    image: "gemini-pro",
-    audio: "gemini-pro",
-    video: "gemini-pro",
-    model3d: "gemini-pro",
+    text: "EleutherAI/gpt-j-6B",
+    image: "stabilityai/stable-diffusion-v1-5",
+    audio: "suno/bark",
+    video: "runwayml/stablevideo-diffusion",
+    model3d: "CompVis/dreamfusion",
   });
+
+  const getRate = (service: Service, modelId: string): number => {
+    const model = AI_MODELS.find(m => m.id === modelId);
+    if (!model) return 0;
+    return model.rates[service] || 0;
+  };
+
+  const rates = {
+    text: getRate('text', selectedModels.text),
+    image: getRate('image', selectedModels.image),
+    audio: getRate('audio', selectedModels.audio),
+    video: getRate('video', selectedModels.video),
+    model3d: getRate('model3d', selectedModels.model3d),
+  };
 
   const debouncedServiceCounts = useDebounce(serviceCounts, 200);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  useEffect(() => {
-    const newRates = {
-      text: getModelRates(selectedModels.text).text,
-      image: getModelRates(selectedModels.image).image,
-      audio: getModelRates(selectedModels.audio).audio,
-      video: getModelRates(selectedModels.video).video,
-      model3d: getModelRates(selectedModels.model3d).model3d,
-    };
-    setRates(newRates);
-  }, [selectedModels, getModelRates]);
-
   const calculateTotal = useCallback(() => {
     let total = 0;
-    for (const service in rates) {
-      total += debouncedServiceCounts[service as Service] * rates[service as Service];
+    for (const service in serviceCounts) {
+      const typedService = service as Service;
+      total += debouncedServiceCounts[typedService] * (rates[typedService] || 0);
     }
     return total;
   }, [debouncedServiceCounts, rates]);
@@ -94,10 +99,6 @@ export default function Home() {
   useEffect(() => {
     setTotalPrice(calculateTotal());
   }, [calculateTotal]);
-
-  const handlePackageSelect = (packageName: string) => {
-    setSelectedPackage(packageName);
-  };
 
   const handleServiceCountChange = (service: Service, count: number) => {
     setServiceCounts((prevCounts) => ({
@@ -116,8 +117,8 @@ export default function Home() {
   const sliderMaxValues: Record<Service, number> = {
     text: 1000,
     image: 200,
-    audio: 60,
-    video: 30,
+    audio: 50,
+    video: 20,
     model3d: 10,
   };
 
@@ -137,6 +138,10 @@ export default function Home() {
       video: 0,
       model3d: 0,
     });
+  };
+
+  const handleResetSliders = () => {
+    resetSliders();
   };
 
   return (
@@ -172,52 +177,66 @@ export default function Home() {
                       </tr>
                     </thead>
                     <tbody>
-                      {Object.entries(rates).map(([service, rate]) => (
-                        <tr key={service} className="border-b border-border">
-                          <td className="p-2 font-medium text-sm md:text-lg">{serviceLabels[service as Service]}</td>
-                          <td className="p-2 text-center">
-                            <AIModelSelector
-                              service={service}
-                              onModelChange={handleModelChange}
-                              selectedModel={selectedModels[service as Service]}
-                            />
-                            <div className="text-xs text-muted-foreground italic">
-                              {aiModelDescriptions[selectedModels[service as Service]]}
-                            </div>
-                          </td>
-                          <td className="p-2 text-center font-bold text-primary text-sm md:text-lg">
-                            {currencySymbol}
-                            {rate} / {serviceUnits[service as Service]}
-                          </td>
-                          <td className="p-2">
-                            <div className="flex items-center justify-center space-x-4">
-                              <Slider
-                                id={`${service}Slider`}
-                                min={0}
-                                max={sliderMaxValues[service as Service]}
-                                step={sliderStepValues[service as Service]}
-                                value={[serviceCounts[service as Service]]}
-                                onValueChange={(value) => handleServiceCountChange(service as Service, value[0])}
-                                className="w-24 md:w-48"
-                              />
-                              <span className="w-24 text-right font-medium text-sm md:text-base">
-                                {serviceCounts[service as Service]} {serviceUnits[service as Service]}
-                              </span>
-                            </div>
-                          </td>
-                          <td
-                            className="p-2 text-right font-bold total-cost-text text-sm md:text-lg"
-                            style={{color: "hsl(var(--cost-color))"}}
-                          >
-                            {currencySymbol}
-                            {serviceCounts[service as Service] * rate}
-                          </td>
-                        </tr>
-                      ))}
+                      {Object.entries(serviceCounts).map(([service, count]) => {
+                        const typedService = service as Service;
+                        const modelId = selectedModels[typedService];
+                        const rate = rates[typedService] || 0;
+                        const unit = AI_MODELS.find(m => m.id === modelId)?.unit || '';
+
+                        return (
+                          <tr key={service} className="border-b border-border">
+                            <td className="p-2 font-medium text-sm md:text-lg">{serviceLabels[typedService]}</td>
+                            <td className="p-2 text-center">
+                              <Select onValueChange={(value) => handleModelChange(typedService, value)} defaultValue={modelId}>
+                                <SelectTrigger className="w-[220px]">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {AI_MODELS.filter(model => model.rates[typedService] !== undefined).map(model => (
+                                    <SelectItem key={model.id} value={model.id}>
+                                      {model.name}
+                                      <div className="text-xs text-muted-foreground italic">
+                                        {aiModelDescriptions[model.id]}
+                                      </div>
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </td>
+                            <td className="p-2 text-center font-bold text-primary text-sm md:text-lg">
+                              {currencySymbol}
+                              {rate} / {unit}
+                            </td>
+                            <td className="p-2">
+                              <div className="flex items-center justify-center space-x-4">
+                                <Slider
+                                  id={`${service}Slider`}
+                                  min={0}
+                                  max={sliderMaxValues[typedService]}
+                                  step={sliderStepValues[typedService]}
+                                  value={[serviceCounts[typedService]]}
+                                  onValueChange={(value) => handleServiceCountChange(typedService, value[0])}
+                                  className="w-24 md:w-48"
+                                />
+                                <span className="w-24 text-right font-medium text-sm md:text-base">
+                                  {serviceCounts[typedService]} {unit}
+                                </span>
+                              </div>
+                            </td>
+                            <td
+                              className="p-2 text-right font-bold total-cost-text text-sm md:text-lg"
+                              style={{color: "hsl(var(--cost-color))"}}
+                            >
+                              {currencySymbol}
+                              {(serviceCounts[typedService] || 0) * rate}
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td colSpan={4} className="py-4 text-xl font-semibold">
+                        <td colSpan={5} className="py-4 text-xl font-semibold">
                           Total Cost
                         </td>
                         <td className="py-4 text-right font-bold total-cost-text text-xl text-primary">
@@ -229,7 +248,7 @@ export default function Home() {
                   </table>
                 </div>
                 <div className="flex justify-end mt-4">
-                  <Button variant="outline" onClick={resetSliders}>
+                  <Button variant="outline" onClick={handleResetSliders}>
                     Reset Sliders
                   </Button>
                   <Button className="ml-4">Get Started</Button>
@@ -237,23 +256,6 @@ export default function Home() {
               </CardContent>
             </Card>
           </section>
-
-          {/* User Dashboard Access Section - Conditionally Rendered */}
-          {selectedPackage && (
-            <section>
-              <h2 className="text-2xl font-semibold text-primary mb-4">User Dashboard</h2>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Welcome to Your Dashboard</CardTitle>
-                  <CardDescription>Manage your AI services and access exclusive features.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="mb-4">You have access to the following features:</p>
-                  <Button>Go to Dashboard</Button>
-                </CardContent>
-              </Card>
-            </section>
-          )}
         </main>
 
         <footer className="text-center mt-8 text-muted-foreground">
