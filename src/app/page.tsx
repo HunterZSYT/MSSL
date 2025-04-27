@@ -6,6 +6,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Slider } from "@/components/ui/slider";
 import { Toaster } from "@/components/ui/toaster";
 import { Separator } from "@/components/ui/separator";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 const rates = {
   text: 1,
@@ -77,49 +87,49 @@ export default function Home() {
               <CardTitle>Customize Your AI Service Plan</CardTitle>
               <CardDescription>Adjust the sliders to match your needs and budget.</CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-6">
-              {Object.entries(rates).map(([service, rate]) => (
-                <div key={service} className="grid gap-2">
-                  <label htmlFor={`${service}Slider`} className="text-sm font-medium leading-none">
-                    {serviceLabels[service as Service]}
-                  </label>
-                  <Slider
-                    id={`${service}Slider`}
-                    min={0}
-                    max={service === "text" ? 1000 : 200}
-                    step={service === "text" ? 10 : 5}
-                    defaultValue={[serviceCounts[service as Service]]}
-                    onValueChange={(value) => handleServiceCountChange(service as Service, value[0])}
-                  />
-                </div>
-              ))}
+            <CardContent className="space-y-4">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[200px]">Service</TableHead>
+                    <TableHead>Count</TableHead>
+                    <TableHead>Rate (BDT)</TableHead>
+                    <TableHead>Cost (BDT)</TableHead>
+                    <TableHead>Adjust</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {Object.entries(rates).map(([service, rate]) => (
+                    <TableRow key={service}>
+                      <TableCell className="font-medium">{serviceLabels[service as Service]}</TableCell>
+                      <TableCell>{serviceCounts[service as Service]}</TableCell>
+                      <TableCell>{rate}</TableCell>
+                      <TableCell>{serviceCounts[service as Service] * rate}</TableCell>
+                      <TableCell>
+                        <Slider
+                          id={`${service}Slider`}
+                          min={0}
+                          max={service === "text" ? 1000 : 200}
+                          step={service === "text" ? 10 : 5}
+                          defaultValue={[serviceCounts[service as Service]]}
+                          onValueChange={(value) => handleServiceCountChange(service as Service, value[0])}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+                <TableFooter>
+                  <TableRow>
+                    <TableCell colSpan={3}>Total Cost</TableCell>
+                    <TableCell className="font-bold">{totalPrice} BDT / mo</TableCell>
+                    <TableCell></TableCell>
+                  </TableRow>
+                </TableFooter>
+              </Table>
             </CardContent>
           </Card>
         </section>
-        {/* Displaying Prices in Seperate Coloumns  */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold text-primary mb-4">Pricing Details</h2>
-          <Card>
-            <CardHeader>
-              <CardTitle>Service Costs</CardTitle>
-              <CardDescription>View the cost breakdown for each service.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {Object.entries(rates).map(([service, rate]) => (
-                  <div key={service} className="border rounded-md p-4">
-                    <div className="font-semibold">{serviceLabels[service as Service]}</div>
-                    <div>Count: {serviceCounts[service as Service]}</div>
-                    <div>Rate: {rate} BDT</div>
-                    <div>Cost: {serviceCounts[service as Service] * rate} BDT</div>
-                  </div>
-                ))}
-              </div>
-              <Separator className="my-4" />
-              <div className="text-xl font-semibold">Total: {totalPrice} BDT / mo</div>
-            </CardContent>
-          </Card>
-        </section>
+
         {/* User Dashboard Access Section - Conditionally Rendered */}
         {selectedPackage && (
           <section>
