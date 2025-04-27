@@ -37,7 +37,7 @@ const serviceLabels: Record<Service, string> = {
 };
 
 const serviceUnits: Record<Service, string> = {
-  text: "texts",
+  text: "prompts",
   image: "images",
   audio: "seconds",
   video: "seconds",
@@ -120,7 +120,7 @@ export default function Home() {
                       <TableRow key={service}>
                         <TableCell className="font-medium text-sm md:text-lg">{serviceLabels[service as Service]}</TableCell>
                         <TableCell className="font-bold text-primary text-center text-sm md:text-lg">
-                          {rate} BDT / {serviceUnits[service as Service]}
+                           {rate} BDT / {serviceUnits[service as Service]}
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-4 justify-center">
@@ -138,7 +138,7 @@ export default function Home() {
                             </span>
                           </div>
                         </TableCell>
-                        <TableCell className="text-right font-bold text-base md:text-xl" style={{ color: 'hsl(var(--cost-color))' }}>
+                        <TableCell className="text-right font-bold total-cost-text text-xl text-primary" style={{ color: 'hsl(var(--cost-color))' }}>
                           {serviceCounts[service as Service] * rate} BDT
                         </TableCell>
                       </TableRow>
