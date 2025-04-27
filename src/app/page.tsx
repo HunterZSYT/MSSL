@@ -16,6 +16,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import { cn } from "@/lib/utils";
+
 const rates = {
   text: 1,
   image: 5,
@@ -70,7 +72,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen py-12 bg-gray-100">
+    <div className="min-h-screen py-12 bg-secondary">
       <Toaster />
       <header className="text-center mb-8">
         <h1 className="text-4xl font-bold text-primary mb-2">AI Landing Hub</h1>
@@ -91,20 +93,18 @@ export default function Home() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[200px]">Service</TableHead>
-                    <TableHead>Quantity</TableHead>
-                    <TableHead>Rate (BDT)</TableHead>
-                    <TableHead className="w-[150px]">Count &amp; Adjust</TableHead>
-                    <TableHead className="text-right">Cost (BDT)</TableHead>
+                    <TableHead className="w-[150px]">Rate (BDT)</TableHead>
+                    <TableHead className="text-center">Count &amp; Adjust</TableHead>
+                    <TableHead className="text-right w-[150px]">Cost (BDT)</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {Object.entries(rates).map(([service, rate]) => (
                     <TableRow key={service}>
                       <TableCell className="font-medium">{serviceLabels[service as Service]}</TableCell>
-                      <TableCell>{serviceCounts[service as Service]}</TableCell>
-                      <TableCell>{rate}</TableCell>
+                      <TableCell className="font-medium">{rate}</TableCell>
                       <TableCell>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-4">
                           <Slider
                             id={`${service}Slider`}
                             min={0}
@@ -112,7 +112,11 @@ export default function Home() {
                             step={service === "text" ? 10 : 5}
                             defaultValue={[serviceCounts[service as Service]]}
                             onValueChange={(value) => handleServiceCountChange(service as Service, value[0])}
+                            className="w-full"
                           />
+                          <span className={cn("font-medium w-16 text-right", serviceCounts[service as Service] > 100 ? "text-sm" : "text-base")}>
+                            {serviceCounts[service as Service]}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell className="text-right font-bold" style={{ color: 'hsl(var(--cost-color))' }}>
@@ -123,7 +127,7 @@ export default function Home() {
                 </TableBody>
                 <TableFooter>
                   <TableRow>
-                    <TableCell colSpan={4}>Total Cost</TableCell>
+                    <TableCell colSpan={3}>Total Cost</TableCell>
                     <TableCell className="text-right font-bold">{totalPrice} BDT / mo</TableCell>
                   </TableRow>
                 </TableFooter>
