@@ -36,6 +36,14 @@ const serviceLabels: Record<Service, string> = {
   model3d: "3D Models",
 };
 
+const serviceUnits: Record<Service, string> = {
+  text: "texts",
+  image: "images",
+  audio: "seconds",
+  video: "seconds",
+  model3d: "models",
+};
+
 export default function Home() {
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   const [serviceCounts, setServiceCounts] = useState({
@@ -83,16 +91,16 @@ export default function Home() {
         {/* Pricing Calculator Section */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold text-primary mb-4">Pricing Calculator</h2>
-          <Card>
+          <Card className="border-2 border-primary/20">
             <CardHeader>
-              <CardTitle>Customize Your AI Service Plan</CardTitle>
-              <CardDescription>Adjust the sliders to match your needs and budget.</CardDescription>
+              <CardTitle className="text-3xl font-bold">Customize Your AI Service Plan</CardTitle>
+              <CardDescription className="text-muted-foreground text-lg">Adjust the sliders to match your needs and budget.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[200px]">Service</TableHead>
+                    <TableHead className="w-[250px]">Service</TableHead>
                     <TableHead className="w-[150px]">Rate (BDT)</TableHead>
                     <TableHead className="text-center">Count &amp; Adjust</TableHead>
                     <TableHead className="text-right w-[150px]">Cost (BDT)</TableHead>
@@ -101,8 +109,8 @@ export default function Home() {
                 <TableBody>
                   {Object.entries(rates).map(([service, rate]) => (
                     <TableRow key={service}>
-                      <TableCell className="font-medium">{serviceLabels[service as Service]}</TableCell>
-                      <TableCell className="font-medium">{rate}</TableCell>
+                      <TableCell className="font-medium text-lg">{serviceLabels[service as Service]}</TableCell>
+                      <TableCell className="font-bold text-primary text-right">{rate} BDT</TableCell>
                       <TableCell>
                         <div className="flex items-center space-x-4">
                           <Slider
@@ -114,21 +122,21 @@ export default function Home() {
                             onValueChange={(value) => handleServiceCountChange(service as Service, value[0])}
                             className="w-full"
                           />
-                          <span className={cn("font-medium w-16 text-right", serviceCounts[service as Service] > 100 ? "text-sm" : "text-base")}>
-                            {serviceCounts[service as Service]}
+                          <span className={cn("font-medium w-24 text-right text-lg", serviceCounts[service as Service] > 100 ? "text-sm" : "text-base")}>
+                            {serviceCounts[service as Service]} {serviceUnits[service as Service]}
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="text-right font-bold" style={{ color: 'hsl(var(--cost-color))' }}>
-                        {serviceCounts[service as Service] * rate}
+                      <TableCell className="text-right font-bold text-xl" style={{ color: 'hsl(var(--cost-color))' }}>
+                        {serviceCounts[service as Service] * rate} BDT
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
                 <TableFooter>
                   <TableRow>
-                    <TableCell colSpan={3}>Total Cost</TableCell>
-                    <TableCell className="text-right font-bold">{totalPrice} BDT / mo</TableCell>
+                    <TableCell colSpan={3} className="text-xl font-semibold">Total Cost</TableCell>
+                    <TableCell className="text-right font-bold text-2xl text-primary">{totalPrice} BDT / mo</TableCell>
                   </TableRow>
                 </TableFooter>
               </Table>
