@@ -110,16 +110,16 @@ export default function Home() {
                   <TableHeader>
                     <TableRow>
                       <TableHead className="w-[200px] md:w-[250px] text-base md:text-lg">Service</TableHead>
-                      <TableHead className="w-[120px] text-base md:text-lg">Rate (BDT)</TableHead>
-                      <TableHead className="text-center w-[200px] text-base md:text-lg">Count &amp; Adjust</TableHead>
-                      <TableHead className="text-right w-[120px] md:w-[150px] text-base md:text-lg">Cost (BDT)</TableHead>
+                      <TableHead className="w-[150px] text-base md:text-lg text-center">Rate (BDT)</TableHead>
+                      <TableHead className="text-center text-base md:text-lg">Count &amp; Adjust</TableHead>
+                      <TableHead className="text-right w-[150px] text-base md:text-lg">Cost (BDT)</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {Object.entries(rates).map(([service, rate]) => (
                       <TableRow key={service}>
                         <TableCell className="font-medium text-sm md:text-lg">{serviceLabels[service as Service]}</TableCell>
-                        <TableCell className="font-bold text-primary text-right text-sm md:text-lg">{rate} BDT</TableCell>
+                        <TableCell className="font-bold text-primary text-center text-sm md:text-lg">{rate} BDT</TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-4 justify-center">
                             <Slider
@@ -145,7 +145,9 @@ export default function Home() {
                   <TableFooter>
                     <TableRow>
                       <TableCell colSpan={3} className="text-xl font-semibold">Total Cost</TableCell>
-                      <TableCell className="text-right font-bold total-cost-text text-xl text-primary">{totalPrice} BDT / mo</TableCell>
+                      <TableCell className="text-right font-bold total-cost-text text-xl text-primary">
+                        {totalPrice} BDT / mo
+                      </TableCell>
                     </TableRow>
                   </TableFooter>
                 </Table>
@@ -178,4 +180,3 @@ export default function Home() {
     </div>
   );
 }
-
