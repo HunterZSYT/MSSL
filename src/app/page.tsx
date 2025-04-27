@@ -172,8 +172,7 @@ export default function Home() {
                       <tr className="text-left">
                         <th className="w-1/5 p-2 text-base md:text-lg">Service</th>
                         <th className="w-1/5 p-2 text-center text-base md:text-lg">AI Model</th>
-                        <th className="w-1/5 p-2 text-center text-base md:text-lg">Rate (/Unit)</th>
-                        <th className="w-2/5 p-2 text-center text-base md:text-lg">Count &amp; Adjust</th>
+                        <th className="w-2/5 p-2 text-center text-base md:text-lg">Rate / Unit &amp; Adjust</th>
                         <th className="w-1/5 p-2 text-right text-base md:text-lg">Cost (BDT)</th>
                       </tr>
                     </thead>
@@ -209,8 +208,6 @@ export default function Home() {
                             <td className="p-2 text-center font-bold text-primary text-sm md:text-lg">
                               {currencySymbol}
                               {rate} / {unit}
-                            </td>
-                            <td className="p-2">
                               <div className="flex items-center justify-center space-x-4">
                                 <Slider
                                   id={`${service}Slider`}
@@ -231,7 +228,7 @@ export default function Home() {
                               style={{color: "hsl(var(--cost-color))"}}
                             >
                               {currencySymbol}
-                              {(serviceCounts[typedService] || 0) * rate}
+                              {((serviceCounts[typedService] || 0) * rate).toFixed(2)}
                             </td>
                           </tr>
                         );
