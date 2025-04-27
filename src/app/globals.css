@@ -6,6 +6,15 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Define screen size variables */
+:root {
+  --mobile-max-width: 767px;
+  --tablet-min-width: 768px;
+  --tablet-max-width: 1023px;
+  --desktop-min-width: 1024px;
+}
+
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -42,6 +51,21 @@ body {
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
     --cost-color: 39 100% 50%; /* Define the cost color */
+
+        /* Responsive font sizes */
+    --text-base-size: 1rem; /* Default text size */
+    --text-lg-size: 1.125rem;
+    --text-xl-size: 1.25rem;
+    --text-2xl-size: 1.5rem;
+    --text-3xl-size: 1.875rem;
+
+
+     /* Mobile adjustments */
+     --mobile-text-base-size: 0.875rem;
+     --mobile-text-lg-size: 1rem;
+     --mobile-text-xl-size: 1.125rem;
+     --mobile-text-2xl-size: 1.25rem;
+     --mobile-text-3xl-size: 1.5rem;
   }
 
   .dark {
@@ -112,3 +136,60 @@ body {
   }
 }
 
+/* Responsive Font Sizes */
+@media (max-width: var(--mobile-max-width)) {
+  .text-base {
+    font-size: var(--mobile-text-base-size);
+  }
+
+  .text-lg {
+    font-size: var(--mobile-text-lg-size);
+  }
+
+  .text-xl {
+    font-size: var(--mobile-text-xl-size);
+  }
+
+  .text-2xl {
+    font-size: var(--mobile-text-2xl-size);
+  }
+
+  .text-3xl {
+    font-size: var(--mobile-text-3xl-size);
+  }
+
+  /* Target the Total Cost text specifically */
+  .total-cost-text {
+    font-size: var(--mobile-text-xl-size); /* Or any other appropriate size */
+  }
+}
+
+/* Larger screens */
+@media (min-width: calc(var(--mobile-max-width) + 1px)) {
+  .text-base {
+    font-size: var(--text-base-size);
+  }
+
+  .text-lg {
+    font-size: var(--text-lg-size);
+  }
+
+   .text-xl {
+    font-size: var(--text-xl-size);
+  }
+
+
+  .text-2xl {
+    font-size: var(--text-2xl-size);
+  }
+
+
+  .text-3xl {
+    font-size: var(--text-3xl-size);
+  }
+
+    /* Target the Total Cost text specifically */
+    .total-cost-text {
+        font-size: var(--text-2xl-size); /* Or any other appropriate size */
+    }
+}

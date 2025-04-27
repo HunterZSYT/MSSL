@@ -79,6 +79,14 @@ export default function Home() {
     }));
   };
 
+  const sliderMaxValues: Record<Service, number> = {
+    text: 1000,
+    image: 200,
+    audio: 60,
+    video: 30,
+    model3d: 10,
+  };
+
   return (
     <div className="min-h-screen py-12 bg-secondary">
       <Toaster />
@@ -117,8 +125,8 @@ export default function Home() {
                             <Slider
                               id={`${service}Slider`}
                               min={0}
-                              max={service === "text" ? 1000 : 200}
-                              step={service === "text" ? 10 : 5}
+                              max={sliderMaxValues[service as Service]}
+                              step={service === "text" ? 10 : 1}
                               defaultValue={[serviceCounts[service as Service]]}
                               onValueChange={(value) => handleServiceCountChange(service as Service, value[0])}
                               className="w-32 md:w-48"
