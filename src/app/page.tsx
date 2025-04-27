@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Toaster } from "@/components/ui/toaster";
-import { Separator } from "@/components/ui/separator";
 import {
   Table,
   TableBody,
@@ -92,23 +91,20 @@ export default function Home() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[200px]">Service</TableHead>
+                    <TableHead>Quantity</TableHead>
                     <TableHead>Rate (BDT)</TableHead>
-                    <TableHead>Cost (BDT)</TableHead>
-                    <TableHead>
-                      <div>Count</div>
-                      <div>Adjust</div>
-                    </TableHead>
+                    <TableHead className="w-[150px]">Count &amp; Adjust</TableHead>
+                    <TableHead className="text-right">Cost (BDT)</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {Object.entries(rates).map(([service, rate]) => (
                     <TableRow key={service}>
                       <TableCell className="font-medium">{serviceLabels[service as Service]}</TableCell>
+                      <TableCell>{serviceCounts[service as Service]}</TableCell>
                       <TableCell>{rate}</TableCell>
-                      <TableCell>{serviceCounts[service as Service] * rate}</TableCell>
                       <TableCell>
-                        <div className="flex flex-col items-center space-y-2">
-                          <div>{serviceCounts[service as Service]}</div>
+                        <div className="flex items-center space-x-2">
                           <Slider
                             id={`${service}Slider`}
                             min={0}
@@ -119,14 +115,16 @@ export default function Home() {
                           />
                         </div>
                       </TableCell>
+                      <TableCell className="text-right font-bold" style={{ color: 'hsl(var(--cost-color))' }}>
+                        {serviceCounts[service as Service] * rate}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
                 <TableFooter>
                   <TableRow>
-                    <TableCell colSpan={2}>Total Cost</TableCell>
-                    <TableCell className="font-bold">{totalPrice} BDT / mo</TableCell>
-                    <TableCell></TableCell>
+                    <TableCell colSpan={4}>Total Cost</TableCell>
+                    <TableCell className="text-right font-bold">{totalPrice} BDT / mo</TableCell>
                   </TableRow>
                 </TableFooter>
               </Table>
