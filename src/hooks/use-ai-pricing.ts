@@ -2,16 +2,12 @@ import {useState, useCallback} from 'react';
 import {AI_MODELS, AIModel} from '@/lib/ai-models';
 
 interface AIPricingHook {
-  selectedModel: string;
-  setSelectedModel: (model: string) => void;
-  getModelRates: () => Record<string, number>;
+  getModelRates: (modelId: string) => Record<string, number>;
 }
 
 export function useAIPricing(): AIPricingHook {
-  const [selectedModel, setSelectedModel] = useState<string>(AI_MODELS[0].id);
-
-  const getModelRates = useCallback(() => {
-    const model = AI_MODELS.find(m => m.id === selectedModel);
+  const getModelRates = useCallback((modelId: string) => {
+    const model = AI_MODELS.find(m => m.id === modelId);
     if (!model) {
       // Provide default rates or handle error
       return {
@@ -23,13 +19,9 @@ export function useAIPricing(): AIPricingHook {
       };
     }
     return model.rates;
-  }, [selectedModel]);
+  }, []);
 
   return {
-    selectedModel,
-    setSelectedModel: (model: string) => {
-      setSelectedModel(model);
-    },
     getModelRates,
   };
 }

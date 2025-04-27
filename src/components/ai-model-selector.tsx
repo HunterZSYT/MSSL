@@ -3,21 +3,20 @@
 import {useState, useEffect} from 'react';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
 import {AI_MODELS} from '@/lib/ai-models';
-import {useAIPricing} from '@/hooks/use-ai-pricing';
 
 interface AIModelSelectorProps {
-  onModelChange: (model: string) => void;
+  service: string;
+  onModelChange: (service: string, model: string) => void;
+  selectedModel: string;
 }
 
-export function AIModelSelector({onModelChange}: AIModelSelectorProps) {
-  const [selectedModel, setSelectedModel] = useState(AI_MODELS[0].id);
-
-  useEffect(() => {
-    onModelChange(selectedModel);
-  }, [selectedModel, onModelChange]);
+export function AIModelSelector({service, onModelChange, selectedModel}: AIModelSelectorProps) {
+  const handleModelChange = (model: string) => {
+    onModelChange(service, model);
+  };
 
   return (
-    <Select onValueChange={setSelectedModel} defaultValue={selectedModel}>
+    <Select onValueChange={value => handleModelChange(value)} defaultValue={selectedModel}>
       <SelectTrigger className="w-[180px]">
         <SelectValue />
       </SelectTrigger>

@@ -56,14 +56,28 @@ export default function Home() {
     model3d: 0,
   });
 
-  const { selectedModel, setSelectedModel, getModelRates } = useAIPricing();
+  const { getModelRates } = useAIPricing();
   const [rates, setRates] = useState(getModelRates());
+  const [totalPrice, setTotalPrice] = useState(calculateTotal());
+
+  const [selectedModels, setSelectedModels] = useState({
+    text: 'gemini-pro',
+    image: 'gemini-pro',
+    audio: 'gemini-pro',
+    video: 'gemini-pro',
+    model3d: 'gemini-pro',
+  });
 
   useEffect(() => {
-    setRates(getModelRates());
-  }, [getModelRates, selectedModel]);
-
-  const [totalPrice, setTotalPrice] = useState(calculateTotal());
+    const newRates = {
+      text: getModelRates(selectedModels.text).text,
+      image: getModelRates(selectedModels.image).image,
+      audio: getModelRates(selectedModels.audio).audio,
+      video: getModelRates(selectedModels.video).video,
+      model3d: getModelRates(selectedModels.model3d).model3d,
+    };
+    setRates(newRates);
+  }, [selectedModels, getModelRates]);
 
   useEffect(() => {
     setTotalPrice(calculateTotal());
@@ -85,6 +99,13 @@ export default function Home() {
     setServiceCounts((prevCounts) => ({
       ...prevCounts,
       [service]: count,
+    }));
+  };
+
+  const handleModelChange = (service: string, model: string) => {
+    setSelectedModels(prevModels => ({
+      ...prevModels,
+      [service]: model,
     }));
   };
 
@@ -114,12 +135,6 @@ export default function Home() {
               <CardDescription className="text-muted-foreground text-lg mb-4">
                 Adjust the sliders to match your needs and budget.
               </CardDescription>
-              <div className="flex items-center justify-start">
-                <label htmlFor="aiModel" className="mr-2 font-semibold text-primary">
-                  Select AI Model:
-                </label>
-                <AIModelSelector onModelChange={setSelectedModel} />
-              </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="table-responsive">
@@ -128,8 +143,9 @@ export default function Home() {
                     <TableRow>
                       <TableHead className="w-[150px] md:w-[200px] text-base md:text-lg">Service</TableHead>
                       <TableHead className="text-center text-base md:text-lg">
-                        Rate (BDT)
+                        AI Model
                       </TableHead>
+                      <TableHead className="text-center text-base md:text-lg">Rate</TableHead>
                       <TableHead className="text-center text-base md:text-lg">
                         Count &amp; Adjust
                       </TableHead>
@@ -142,8 +158,15 @@ export default function Home() {
                     {Object.entries(rates).map(([service, rate]) => (
                       <TableRow key={service}>
                         <TableCell className="font-medium text-sm md:text-lg">{serviceLabels[service as Service]}</TableCell>
+                        <TableCell className="text-center">
+                          <AIModelSelector
+                            service={service}
+                            onModelChange={handleModelChange}
+                            selectedModel={selectedModels[service as Service]}
+                          />
+                        </TableCell>
                         <TableCell className="font-bold text-primary text-center text-sm md:text-lg">
-                           {rates[service as Service]} BDT / {serviceUnits[service as Service]}
+                          {rates[service as Service]} BDT / {serviceUnits[service as Service]}
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-4 justify-center">
@@ -169,7 +192,7 @@ export default function Home() {
                   </TableBody>
                   <TableFooter>
                     <TableRow>
-                      <TableCell colSpan={3} className="text-xl font-semibold">Total Cost</TableCell>
+                      <TableCell colSpan={4} className="text-xl font-semibold">Total Cost</TableCell>
                       <TableCell className="text-right font-bold total-cost-text text-xl text-primary">
                         {totalPrice} BDT / mo
                       </TableCell>
