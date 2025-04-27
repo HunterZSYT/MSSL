@@ -48,8 +48,8 @@ const serviceLabels: Record<Service, string> = {
 const serviceUnits: Record<Service, string> = {
   text: "prompts",
   image: "images",
-  audio: "clips",
-  video: "clips",
+  audio: "seconds",
+  video: "seconds",
   model3d: "models",
 };
 
@@ -171,7 +171,7 @@ export default function Home() {
                       <tr className="text-left">
                         <th className="w-1/5 p-2 text-base md:text-lg">Service</th>
                         <th className="w-1/5 p-2 text-center text-base md:text-lg">AI Model</th>
-                        <th className="w-1/5 p-2 text-center text-base md:text-lg">Rate (/Unit)</th>
+                        <th className="w-1/5 p-2 text-center text-base md:text-lg">Rate</th>
                         <th className="w-2/5 p-2 text-center text-base md:text-lg">Count &amp; Adjust</th>
                         <th className="w-1/5 p-2 text-right text-base md:text-lg">Cost (BDT)</th>
                       </tr>
@@ -180,8 +180,10 @@ export default function Home() {
                       {Object.entries(serviceCounts).map(([service, count]) => {
                         const typedService = service as Service;
                         const modelId = selectedModels[typedService];
+                        const model = AI_MODELS.find(m => m.id === modelId);
                         const rate = rates[typedService] || 0;
-                        const unit = AI_MODELS.find(m => m.id === modelId)?.unit || '';
+                        const unit = model?.unit || '';
+                        const unitDescription = model?.description || '';
 
                         return (
                           <tr key={service} className="border-b border-border">
@@ -206,6 +208,7 @@ export default function Home() {
                             <td className="p-2 text-center font-bold text-primary text-sm md:text-lg">
                               {currencySymbol}
                               {rate} / {unit}
+                              {unitDescription && ` ${unitDescription}`}
                             </td>
                             <td className="p-2">
                               <div className="flex items-center justify-center space-x-4">
@@ -219,7 +222,7 @@ export default function Home() {
                                   className="w-24 md:w-48"
                                 />
                                 <span className="w-24 text-right font-medium text-sm md:text-base">
-                                  {serviceCounts[typedService]} {unit}
+                                  {serviceCounts[typedService]} {typedService === 'audio' || typedService === 'video' ? 'seconds' : unit}
                                 </span>
                               </div>
                             </td>
