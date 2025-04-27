@@ -17,8 +17,10 @@ import {
 } from "@/components/ui/table"
 
 import { cn } from "@/lib/utils";
+import { AIModelSelector } from "@/components/ai-model-selector";
+import { useAIPricing } from "@/hooks/use-ai-pricing";
 
-const rates = {
+const defaultRates = {
   text: 1,
   image: 5,
   audio: 50,
@@ -26,7 +28,7 @@ const rates = {
   model3d: 100,
 };
 
-type Service = keyof typeof rates;
+type Service = keyof typeof defaultRates;
 
 const serviceLabels: Record<Service, string> = {
   text: "Text Prompts",
@@ -54,11 +56,18 @@ export default function Home() {
     model3d: 0,
   });
 
+  const { selectedModel, setSelectedModel, getModelRates } = useAIPricing();
+  const [rates, setRates] = useState(getModelRates());
+
+  useEffect(() => {
+    setRates(getModelRates());
+  }, [getModelRates, selectedModel]);
+
   const [totalPrice, setTotalPrice] = useState(calculateTotal());
 
   useEffect(() => {
     setTotalPrice(calculateTotal());
-  }, [serviceCounts]);
+  }, [serviceCounts, rates]);
 
   function calculateTotal() {
     let total = 0;
@@ -102,7 +111,15 @@ export default function Home() {
           <Card className="border-2 border-primary/20">
             <CardHeader>
               <CardTitle className="text-3xl font-bold">Customize Your AI Service Plan</CardTitle>
-              <CardDescription className="text-muted-foreground text-lg">Adjust the sliders to match your needs and budget.</CardDescription>
+              <CardDescription className="text-muted-foreground text-lg mb-4">
+                Adjust the sliders to match your needs and budget.
+              </CardDescription>
+              <div className="flex items-center justify-start">
+                <label htmlFor="aiModel" className="mr-2 font-semibold text-primary">
+                  Select AI Model:
+                </label>
+                <AIModelSelector onModelChange={setSelectedModel} />
+              </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="table-responsive">
@@ -110,9 +127,15 @@ export default function Home() {
                   <TableHeader>
                     <TableRow>
                       <TableHead className="w-[150px] md:w-[200px] text-base md:text-lg">Service</TableHead>
-                      <TableHead className="text-center text-base md:text-lg">Rate (BDT)</TableHead>
-                      <TableHead className="text-center text-base md:text-lg">Count &amp; Adjust</TableHead>
-                      <TableHead className="text-right w-[120px] md:w-[150px] text-base md:text-lg">Cost (BDT)</TableHead>
+                      <TableHead className="text-center text-base md:text-lg">
+                        Rate (BDT)
+                      </TableHead>
+                      <TableHead className="text-center text-base md:text-lg">
+                        Count &amp; Adjust
+                      </TableHead>
+                      <TableHead className="text-right w-[120px] md:w-[150px] text-base md:text-lg">
+                        Cost (BDT)
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -120,7 +143,7 @@ export default function Home() {
                       <TableRow key={service}>
                         <TableCell className="font-medium text-sm md:text-lg">{serviceLabels[service as Service]}</TableCell>
                         <TableCell className="font-bold text-primary text-center text-sm md:text-lg">
-                           {rate} BDT / {serviceUnits[service as Service]}
+                           {rates[service as Service]} BDT / {serviceUnits[service as Service]}
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-4 justify-center">
@@ -139,7 +162,7 @@ export default function Home() {
                           </div>
                         </TableCell>
                         <TableCell className="text-right font-bold total-cost-text text-xl text-primary" style={{ color: 'hsl(var(--cost-color))' }}>
-                          {serviceCounts[service as Service] * rate} BDT
+                          {serviceCounts[service as Service] * rates[service as Service]} BDT
                         </TableCell>
                       </TableRow>
                     ))}
