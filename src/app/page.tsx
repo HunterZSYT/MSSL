@@ -71,7 +71,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen py-12">
+    <div className="min-h-screen py-12 bg-gray-100">
       <Toaster />
       <header className="text-center mb-8">
         <h1 className="text-4xl font-bold text-primary mb-2">AI Landing Hub</h1>
@@ -92,35 +92,39 @@ export default function Home() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[200px]">Service</TableHead>
-                    <TableHead>Count</TableHead>
                     <TableHead>Rate (BDT)</TableHead>
                     <TableHead>Cost (BDT)</TableHead>
-                    <TableHead>Adjust</TableHead>
+                    <TableHead>
+                      <div>Count</div>
+                      <div>Adjust</div>
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {Object.entries(rates).map(([service, rate]) => (
                     <TableRow key={service}>
                       <TableCell className="font-medium">{serviceLabels[service as Service]}</TableCell>
-                      <TableCell>{serviceCounts[service as Service]}</TableCell>
                       <TableCell>{rate}</TableCell>
                       <TableCell>{serviceCounts[service as Service] * rate}</TableCell>
                       <TableCell>
-                        <Slider
-                          id={`${service}Slider`}
-                          min={0}
-                          max={service === "text" ? 1000 : 200}
-                          step={service === "text" ? 10 : 5}
-                          defaultValue={[serviceCounts[service as Service]]}
-                          onValueChange={(value) => handleServiceCountChange(service as Service, value[0])}
-                        />
+                        <div className="flex flex-col items-center space-y-2">
+                          <div>{serviceCounts[service as Service]}</div>
+                          <Slider
+                            id={`${service}Slider`}
+                            min={0}
+                            max={service === "text" ? 1000 : 200}
+                            step={service === "text" ? 10 : 5}
+                            defaultValue={[serviceCounts[service as Service]]}
+                            onValueChange={(value) => handleServiceCountChange(service as Service, value[0])}
+                          />
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
                 <TableFooter>
                   <TableRow>
-                    <TableCell colSpan={3}>Total Cost</TableCell>
+                    <TableCell colSpan={2}>Total Cost</TableCell>
                     <TableCell className="font-bold">{totalPrice} BDT / mo</TableCell>
                     <TableCell></TableCell>
                   </TableRow>
