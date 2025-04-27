@@ -110,8 +110,8 @@ export default function Home() {
                   <TableHeader>
                     <TableRow>
                       <TableHead className="w-[200px] md:w-[250px] text-base md:text-lg">Service</TableHead>
-                      <TableHead className="w-[100px] md:w-[120px] text-base md:text-lg">Rate (BDT)</TableHead>
-                      <TableHead className="text-center text-base md:text-lg">Count &amp; Adjust</TableHead>
+                      <TableHead className="w-[120px] text-base md:text-lg">Rate (BDT)</TableHead>
+                      <TableHead className="text-center w-[200px] text-base md:text-lg">Count &amp; Adjust</TableHead>
                       <TableHead className="text-right w-[120px] md:w-[150px] text-base md:text-lg">Cost (BDT)</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -145,7 +145,7 @@ export default function Home() {
                   <TableFooter>
                     <TableRow>
                       <TableCell colSpan={3} className="text-xl font-semibold">Total Cost</TableCell>
-                      <TableCell className="text-right font-bold total-cost-text text-primary">{totalPrice} BDT / mo</TableCell>
+                      <TableCell className="text-right font-bold total-cost-text text-xl text-primary">{totalPrice} BDT / mo</TableCell>
                     </TableRow>
                   </TableFooter>
                 </Table>
