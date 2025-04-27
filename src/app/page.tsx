@@ -110,7 +110,7 @@ export default function Home() {
                   <TableHeader>
                     <TableRow>
                       <TableHead className="w-[150px] md:w-[200px] text-base md:text-lg">Service</TableHead>
-                      <TableHead className="text-center text-base md:text-lg">Rate</TableHead>
+                      <TableHead className="text-center text-base md:text-lg">Rate (BDT)</TableHead>
                       <TableHead className="text-center text-base md:text-lg">Count &amp; Adjust</TableHead>
                       <TableHead className="text-right w-[120px] md:w-[150px] text-base md:text-lg">Cost (BDT)</TableHead>
                     </TableRow>
@@ -120,7 +120,7 @@ export default function Home() {
                       <TableRow key={service}>
                         <TableCell className="font-medium text-sm md:text-lg">{serviceLabels[service as Service]}</TableCell>
                         <TableCell className="font-bold text-primary text-center text-sm md:text-lg">
-                          {rate} BDT / 1 {serviceLabels[service as Service].slice(0, serviceLabels[service as Service].length -1)}
+                          {rate} BDT / {serviceUnits[service as Service]}
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-4 justify-center">
