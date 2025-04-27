@@ -80,7 +80,7 @@ export const AI_MODELS: AIModel[] = [
   {
     id: 'suno/bark',
     name: 'suno/bark',
-    rates: { audio: 0.10 },
+    rates: { audio: 0.50 }, // rate of 0.10 for every 5 seconds
     unit: 'clip',
     service: 'audio',
     description: '(up to 5 s)',
@@ -88,7 +88,7 @@ export const AI_MODELS: AIModel[] = [
   {
     id: 'tts_models/en/ljspeech/vits',
     name: 'tts_models/en/ljspeech/vits',
-    rates: { audio: 0.10 },
+    rates: { audio: 0.50 },// rate of 0.10 for every 5 seconds
     unit: 'clip',
     service: 'audio',
     description: '(up to 5 s)',
@@ -96,7 +96,7 @@ export const AI_MODELS: AIModel[] = [
   {
     id: 'facebook/tts_transformer-es-en',
     name: 'facebook/tts_transformer-es-en',
-    rates: { audio: 0.10 },
+    rates: { audio: 0.50 },// rate of 0.10 for every 5 seconds
     unit: 'clip',
     service: 'audio',
     description: '(up to 5 s)',
@@ -104,7 +104,7 @@ export const AI_MODELS: AIModel[] = [
   {
     id: 'runwayml/stablevideo-diffusion',
     name: 'runwayml/stablevideo-diffusion',
-    rates: { video: 0.06 },
+    rates: { video: 0.18 }, // rate of 0.06 for every 3 seconds
     unit: 'clip',
     service: 'video',
     description: '(up to 3 s)',
@@ -112,7 +112,7 @@ export const AI_MODELS: AIModel[] = [
   {
     id: 'damo/cogvideo',
     name: 'damo/cogvideo',
-    rates: { video: 0.06 },
+    rates: { video: 0.18 }, // rate of 0.06 for every 3 seconds
     unit: 'clip',
     service: 'video',
     description: '(up to 3 s)',

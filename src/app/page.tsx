@@ -90,7 +90,13 @@ export default function Home() {
     let total = 0;
     for (const service in serviceCounts) {
       const typedService = service as Service;
-      total += debouncedServiceCounts[typedService] * (rates[typedService] || 0);
+      let rate = rates[typedService] || 0;
+      if (typedService === 'audio') {
+        rate = (rates[typedService] / 5) || 0; // Rate per second for audio
+      } else if (typedService === 'video') {
+        rate = (rates[typedService] / 3) || 0; // Rate per second for video
+      }
+      total += debouncedServiceCounts[typedService] * rate;
     }
     return parseFloat(total.toFixed(2));
   }, [debouncedServiceCounts, rates]);
@@ -181,9 +187,15 @@ export default function Home() {
                         const typedService = service as Service;
                         const modelId = selectedModels[typedService];
                         const model = AI_MODELS.find(m => m.id === modelId);
-                        const rate = rates[typedService] || 0;
+                        let rate = rates[typedService] || 0;
                         const unit = model?.unit || '';
                         const unitDescription = model?.description || '';
+
+                        if (typedService === 'audio') {
+                          rate = (rates[typedService] / 5) || 0; // Rate per second for audio
+                        } else if (typedService === 'video') {
+                          rate = (rates[typedService] / 3) || 0; // Rate per second for video
+                        }
 
                         return (
                           <tr key={service} className="border-b border-border">
@@ -207,7 +219,7 @@ export default function Home() {
                             </td>
                             <td className="p-2 text-center font-bold text-primary text-sm md:text-lg">
                               {currencySymbol}
-                              {rate} / {unit}
+                              {typedService === 'audio' || typedService === 'video' ? (rates[typedService] / (typedService === 'audio' ? 5 : 3)).toFixed(2) : rates[typedService].toFixed(2)} / {unit}
                               <div className="flex items-center justify-center space-x-4">
                                 <Slider
                                   id={`${service}Slider`}
