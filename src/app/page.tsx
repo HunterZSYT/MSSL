@@ -51,10 +51,10 @@ const aiModelDescriptions: Record<string, string> = {
 export default function Home() {
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   const [serviceCounts, setServiceCounts] = useState({
-    text: 100,
-    image: 10,
-    audio: 5,
-    video: 1,
+    text: 0,
+    image: 0,
+    audio: 0,
+    video: 0,
     model3d: 0,
   });
 
@@ -127,6 +127,16 @@ export default function Home() {
     audio: 1,
     video: 1,
     model3d: 1,
+  };
+
+  const resetSliders = () => {
+    setServiceCounts({
+      text: 0,
+      image: 0,
+      audio: 0,
+      video: 0,
+      model3d: 0,
+    });
   };
 
   return (
@@ -219,13 +229,7 @@ export default function Home() {
                   </table>
                 </div>
                 <div className="flex justify-end mt-4">
-                  <Button variant="outline" onClick={() => setServiceCounts({
-                    text: 100,
-                    image: 10,
-                    audio: 5,
-                    video: 1,
-                    model3d: 0,
-                  })}>
+                  <Button variant="outline" onClick={resetSliders}>
                     Reset Sliders
                   </Button>
                   <Button className="ml-4">Get Started</Button>
