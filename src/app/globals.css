@@ -1,0 +1,197 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Define screen size variables */
+:root {
+  --mobile-max-width: 767px;
+  --tablet-min-width: 768px;
+  --tablet-max-width: 1023px;
+  --desktop-min-width: 1024px;
+}
+
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --primary: 210 90% 45%;  /* Updated primary color */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --accent: 180 100% 25%;  /* Updated accent color */
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    --cost-color: 39 100% 50%; /* Define the cost color */
+
+        /* Responsive font sizes */
+    --text-base-size: 1rem; /* Default text size */
+    --text-lg-size: 1.125rem;
+    --text-xl-size: 1.25rem;
+    --text-2xl-size: 1.5rem;
+    --text-3xl-size: 1.875rem;
+
+
+     /* Mobile adjustments */
+     --mobile-text-base-size: 0.875rem;
+     --mobile-text-lg-size: 1rem;
+     --mobile-text-xl-size: 1.125rem;
+     --mobile-text-2xl-size: 1.25rem;
+     --mobile-text-3xl-size: 1.5rem;
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+    --popover: 224 71% 4%;
+    --popover-foreground: 215 20.2% 65.1%;
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+    --border: 216 17.2% 80.8%;
+    --input: 216 17.2% 80.8%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --accent: 216 17.2% 80.8%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --ring: 217.2 91.2% 59.8%;
+    --radius: 0.5rem;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    --cost-color: 39 100% 50%; /* Define the cost color */
+  }
+
+  [data-theme='light'] {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+  }
+
+  [data-theme='dark'] {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Responsive Table Styles */
+@media (max-width: 768px) {
+  .table-responsive {
+    overflow-x: auto;
+  }
+  .table-responsive table {
+    width: 100%;
+    min-width: 640px; /* Minimum width to avoid content collapse */
+  }
+}
+
+/* Responsive Font Sizes */
+@media (max-width: var(--mobile-max-width)) {
+  .text-base {
+    font-size: var(--mobile-text-base-size);
+  }
+
+  .text-lg {
+    font-size: var(--mobile-text-lg-size);
+  }
+
+  .text-xl {
+    font-size: var(--mobile-text-xl-size);
+  }
+
+  .text-2xl {
+    font-size: var(--mobile-text-2xl-size);
+  }
+
+  .text-3xl {
+    font-size: var(--mobile-text-3xl-size);
+  }
+
+  /* Target the Total Cost text specifically */
+  .total-cost-text {
+    font-size: var(--mobile-text-xl-size); /* Or any other appropriate size */
+    display: inline; /* Ensure it's inline */
+  }
+}
+
+/* Larger screens */
+@media (min-width: calc(var(--mobile-max-width) + 1px)) {
+  .text-base {
+    font-size: var(--text-base-size);
+  }
+
+  .text-lg {
+    font-size: var(--text-lg-size);
+  }
+
+   .text-xl {
+    font-size: var(--text-xl-size);
+  }
+
+
+  .text-2xl {
+    font-size: var(--text-2xl-size);
+  }
+
+
+  .text-3xl {
+    font-size: var(--text-3xl-size);
+  }
+
+    /* Target the Total Cost text specifically */
+    .total-cost-text {
+        font-size: var(--text-2xl-size); /* Or any other appropriate size */
+        display: inline; /* Ensure it's inline */
+    }
+}
