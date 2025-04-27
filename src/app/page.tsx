@@ -85,7 +85,6 @@ export default function Home() {
   };
 
   const debouncedServiceCounts = useDebounce(serviceCounts, 200);
-  const [totalPrice, setTotalPrice] = useState(0);
 
   const calculateTotal = useCallback(() => {
     let total = 0;
@@ -95,6 +94,8 @@ export default function Home() {
     }
     return parseFloat(total.toFixed(2));
   }, [debouncedServiceCounts, rates]);
+
+  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
     setTotalPrice(calculateTotal());
@@ -171,7 +172,7 @@ export default function Home() {
                       <tr className="text-left">
                         <th className="w-1/5 p-2 text-base md:text-lg">Service</th>
                         <th className="w-1/5 p-2 text-center text-base md:text-lg">AI Model</th>
-                        <th className="w-1/5 p-2 text-center text-base md:text-lg">Rate</th>
+                        <th className="w-1/5 p-2 text-center text-base md:text-lg">Rate (/Unit)</th>
                         <th className="w-2/5 p-2 text-center text-base md:text-lg">Count &amp; Adjust</th>
                         <th className="w-1/5 p-2 text-right text-base md:text-lg">Cost (BDT)</th>
                       </tr>
@@ -189,7 +190,7 @@ export default function Home() {
                           <tr key={service} className="border-b border-border">
                             <td className="p-2 font-medium text-sm md:text-lg">{serviceLabels[typedService]}</td>
                             <td className="p-2 text-center">
-                              <Select onValueChange={(value) => handleModelChange(typedService, value)} defaultValue={modelId}>
+                              <Select onValueChange={(value) => handleModelChange(typedService, value)} defaultValue={modelId} className="md:min-w-[200px] text-sm md:text-base">
                                 <SelectTrigger className="w-[220px]">
                                   <SelectValue />
                                 </SelectTrigger>
