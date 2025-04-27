@@ -84,7 +84,7 @@ export default function Home() {
       <Toaster />
       <header className="text-center mb-8">
         <h1 className="text-4xl font-bold text-primary mb-2">AI Landing Hub</h1>
-        <p className="text-muted-foreground">Your All-In-One AI Solution</p>
+        <p className="text-muted-foreground text-lg">Your All-In-One AI Solution</p>
       </header>
 
       <main className="container mx-auto px-4">
@@ -100,17 +100,17 @@ export default function Home() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[250px]">Service</TableHead>
-                    <TableHead className="w-[150px]">Rate (BDT)</TableHead>
-                    <TableHead className="text-center">Count &amp; Adjust</TableHead>
-                    <TableHead className="text-right w-[150px]">Cost (BDT)</TableHead>
+                    <TableHead className="w-[250px] text-lg">Service</TableHead>
+                    <TableHead className="w-[150px] text-lg">Rate (BDT)</TableHead>
+                    <TableHead className="text-center text-lg">Count &amp; Adjust</TableHead>
+                    <TableHead className="text-right w-[150px] text-lg">Cost (BDT)</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {Object.entries(rates).map(([service, rate]) => (
                     <TableRow key={service}>
                       <TableCell className="font-medium text-lg">{serviceLabels[service as Service]}</TableCell>
-                      <TableCell className="font-bold text-primary text-right">{rate} BDT</TableCell>
+                      <TableCell className="font-bold text-primary text-right text-lg">{rate} BDT</TableCell>
                       <TableCell>
                         <div className="flex items-center space-x-4">
                           <Slider
