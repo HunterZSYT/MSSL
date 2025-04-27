@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { toast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
+import { Slider } from "@/components/ui/slider";
 
 const packages = [
   {
@@ -30,8 +31,36 @@ const packages = [
   },
 ];
 
+const rates = {
+  text: 1,
+  image: 5,
+  audio: 50,
+  video: 100,
+  model3d: 100,
+};
+
 export default function Home() {
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
+  const [textCount, setTextCount] = useState<number>(100);
+  const [imageCount, setImageCount] = useState<number>(10);
+  const [audioCount, setAudioCount] = useState<number>(5);
+  const [videoCount, setVideoCount] = useState<number>(1);
+  const [model3dCount, setModel3dCount] = useState<number>(0);
+  const [totalPrice, setTotalPrice] = useState<number>(calculateTotal());
+
+  useEffect(() => {
+    setTotalPrice(calculateTotal());
+  }, [textCount, imageCount, audioCount, videoCount, model3dCount]);
+
+  function calculateTotal() {
+    return (
+      textCount * rates.text +
+      imageCount * rates.image +
+      audioCount * rates.audio +
+      videoCount * rates.video +
+      model3dCount * rates.model3d
+    );
+  }
 
   const handlePackageSelect = (packageName: string) => {
     setSelectedPackage(packageName);
@@ -89,6 +118,91 @@ export default function Home() {
 
         {/* Pricing Calculator Section */}
         <section className="mb-12">
+          <h2 className="text-2xl font-semibold text-primary mb-4">Pricing Calculator</h2>
+          <Card>
+            <CardHeader>
+              <CardTitle>Customize Your AI Service Plan</CardTitle>
+              <CardDescription>Adjust the sliders to match your needs and budget.</CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-6">
+              <div className="grid gap-2">
+                <label htmlFor="textSlider" className="text-sm font-medium leading-none">
+                  Text Prompts ({textCount} × 1 BDT)
+                </label>
+                <Slider
+                  id="textSlider"
+                  min={0}
+                  max={1000}
+                  step={10}
+                  defaultValue={[100]}
+                  onValueChange={(value) => setTextCount(value[0])}
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <label htmlFor="imageSlider" className="text-sm font-medium leading-none">
+                  Image Generations ({imageCount} × 5 BDT)
+                </label>
+                <Slider
+                  id="imageSlider"
+                  min={0}
+                  max={200}
+                  step={5}
+                  defaultValue={[10]}
+                  onValueChange={(value) => setImageCount(value[0])}
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <label htmlFor="audioSlider" className="text-sm font-medium leading-none">
+                  Audio Clips ({audioCount} × 50 BDT)
+                </label>
+                <Slider
+                  id="audioSlider"
+                  min={0}
+                  max={50}
+                  step={1}
+                  defaultValue={[5]}
+                  onValueChange={(value) => setAudioCount(value[0])}
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <label htmlFor="videoSlider" className="text-sm font-medium leading-none">
+                  Video Clips ({videoCount} × 100 BDT)
+                </label>
+                <Slider
+                  id="videoSlider"
+                  min={0}
+                  max={20}
+                  step={1}
+                  defaultValue={[1]}
+                  onValueChange={(value) => setVideoCount(value[0])}
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <label htmlFor="model3dSlider" className="text-sm font-medium leading-none">
+                  3D Models ({model3dCount} × 100 BDT)
+                </label>
+                <Slider
+                  id="model3dSlider"
+                  min={0}
+                  max={10}
+                  step={1}
+                  defaultValue={[0]}
+                  onValueChange={(value) => setModel3dCount(value[0])}
+                />
+              </div>
+            </CardContent>
+            <CardFooter className="justify-end">
+              <div className="text-xl font-semibold">Total: {totalPrice} BDT / mo</div>
+            </CardFooter>
+          </Card>
+        </section>
+
+        {/* Pricing Section */}
+        <section className="mb-12">
           <h2 className="text-2xl font-semibold text-primary mb-4">Choose Your Plan</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {packages.map((pack) => (
@@ -114,7 +228,6 @@ export default function Home() {
             ))}
           </div>
         </section>
-
         {/* Testimonials Section */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold text-primary mb-4">What Our Clients Say</h2>
