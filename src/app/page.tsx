@@ -196,7 +196,7 @@ export default function Home() {
                                 min={0}
                                 max={sliderMaxValues[service as Service]}
                                 step={sliderStepValues[service as Service]}
-                                defaultValue={[serviceCounts[service as Service]]}
+                                value={[serviceCounts[service as Service]]}
                                 onValueChange={(value) => handleServiceCountChange(service as Service, value[0])}
                                 className="w-24 md:w-48"
                               />
