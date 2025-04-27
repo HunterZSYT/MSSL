@@ -100,3 +100,15 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Responsive Table Styles */
+@media (max-width: 768px) {
+  .table-responsive {
+    overflow-x: auto;
+  }
+  .table-responsive table {
+    width: 100%;
+    min-width: 640px; /* Minimum width to avoid content collapse */
+  }
+}
+

@@ -97,49 +97,51 @@ export default function Home() {
               <CardDescription className="text-muted-foreground text-lg">Adjust the sliders to match your needs and budget.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[250px] text-lg">Service</TableHead>
-                    <TableHead className="w-[150px] text-lg">Rate (BDT)</TableHead>
-                    <TableHead className="text-center text-lg">Count &amp; Adjust</TableHead>
-                    <TableHead className="text-right w-[150px] text-lg">Cost (BDT)</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {Object.entries(rates).map(([service, rate]) => (
-                    <TableRow key={service}>
-                      <TableCell className="font-medium text-lg">{serviceLabels[service as Service]}</TableCell>
-                      <TableCell className="font-bold text-primary text-right text-lg">{rate} BDT</TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-4">
-                          <Slider
-                            id={`${service}Slider`}
-                            min={0}
-                            max={service === "text" ? 1000 : 200}
-                            step={service === "text" ? 10 : 5}
-                            defaultValue={[serviceCounts[service as Service]]}
-                            onValueChange={(value) => handleServiceCountChange(service as Service, value[0])}
-                            className="w-full"
-                          />
-                          <span className={cn("font-medium w-24 text-right text-lg", serviceCounts[service as Service] > 100 ? "text-sm" : "text-base")}>
-                            {serviceCounts[service as Service]} {serviceUnits[service as Service]}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right font-bold text-xl" style={{ color: 'hsl(var(--cost-color))' }}>
-                        {serviceCounts[service as Service] * rate} BDT
-                      </TableCell>
+              <div className="table-responsive">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[200px] md:w-[250px] text-base md:text-lg">Service</TableHead>
+                      <TableHead className="w-[80px] md:w-[120px] text-base md:text-lg">Rate (BDT)</TableHead>
+                      <TableHead className="text-center text-base md:text-lg">Count &amp; Adjust</TableHead>
+                      <TableHead className="text-right w-[80px] md:w-[120px] text-base md:text-lg">Cost (BDT)</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-                <TableFooter>
-                  <TableRow>
-                    <TableCell colSpan={3} className="text-xl font-semibold">Total Cost</TableCell>
-                    <TableCell className="text-right font-bold text-2xl text-primary">{totalPrice} BDT / mo</TableCell>
-                  </TableRow>
-                </TableFooter>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {Object.entries(rates).map(([service, rate]) => (
+                      <TableRow key={service}>
+                        <TableCell className="font-medium text-sm md:text-lg">{serviceLabels[service as Service]}</TableCell>
+                        <TableCell className="font-bold text-primary text-right text-sm md:text-lg">{rate} BDT</TableCell>
+                        <TableCell>
+                          <div className="flex items-center space-x-4 justify-center">
+                            <Slider
+                              id={`${service}Slider`}
+                              min={0}
+                              max={service === "text" ? 1000 : 200}
+                              step={service === "text" ? 10 : 5}
+                              defaultValue={[serviceCounts[service as Service]]}
+                              onValueChange={(value) => handleServiceCountChange(service as Service, value[0])}
+                              className="w-32 md:w-48"
+                            />
+                            <span className={cn("font-medium w-24 text-right text-sm md:text-base", serviceCounts[service as Service] > 100 ? "text-sm" : "text-base")}>
+                              {serviceCounts[service as Service]} {serviceUnits[service as Service]}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-right font-bold text-base md:text-xl" style={{ color: 'hsl(var(--cost-color))' }}>
+                          {serviceCounts[service as Service] * rate} BDT
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                  <TableFooter>
+                    <TableRow>
+                      <TableCell colSpan={3} className="text-xl font-semibold">Total Cost</TableCell>
+                      <TableCell className="text-right font-bold text-2xl text-primary">{totalPrice} BDT / mo</TableCell>
+                    </TableRow>
+                  </TableFooter>
+                </Table>
+              </div>
             </CardContent>
           </Card>
         </section>
