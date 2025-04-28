@@ -1,10 +1,7 @@
+/* Global styles */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
 
 /* Define screen size variables */
 :root {
@@ -14,6 +11,44 @@ body {
   --desktop-min-width: 1024px;
 }
 
+/* Custom gradient background that works in all themes */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(-45deg, 
+    rgba(33, 150, 243, 0.15), 
+    rgba(0, 128, 128, 0.15), 
+    rgba(66, 99, 235, 0.12), 
+    rgba(45, 175, 185, 0.15)
+  ) !important;
+  background-size: 400% 400% !important;
+  animation: gradient-animation 15s ease infinite !important;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@keyframes gradient-animation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Dark mode adds an overlay to darken the gradient slightly */
+.dark body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: -1;
+  pointer-events: none;
+}
 
 @layer base {
   :root {
@@ -114,14 +149,15 @@ body {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
   }
-}
-
-@layer base {
+  
   * {
     @apply border-border;
   }
+  
   body {
     @apply bg-background text-foreground;
+    position: relative;
+    min-height: 100vh;
   }
 }
 
